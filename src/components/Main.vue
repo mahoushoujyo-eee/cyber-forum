@@ -19,18 +19,20 @@
 
     <el-container>
       <el-header style="text-align: right; font-size: 12px">
-        <div style="display: inline; position: relative; right: 35%; top: 10%">
-          <i class="iconfont icon-c" style="font-size: 30px"></i>
-          <i class="iconfont icon-y" style="font-size: 30px"></i>
-          <i class="iconfont icon-b" style="font-size: 30px"></i>
-          <i class="iconfont icon-e" style="font-size: 30px"></i>
-          <i class="iconfont icon-r" style="font-size: 30px"></i>
-          <i class="iconfont icon-f" style="font-size: 30px"></i>
-          <i class="iconfont icon-o" style="font-size: 30px"></i>
-          <i class="iconfont icon-r" style="font-size: 30px"></i>
-          <i class="iconfont icon-u" style="font-size: 30px"></i>
-          <i class="iconfont icon-m" style="font-size: 30px"></i>
-        </div>
+        <router-link to="/" style="text-decoration: none; color: #222222;">
+          <div style="display: inline; position: relative; right: 35%; top: 10%">
+            <i class="iconfont icon-c" style="font-size: 30px"></i>
+            <i class="iconfont icon-y" style="font-size: 30px"></i>
+            <i class="iconfont icon-b" style="font-size: 30px"></i>
+            <i class="iconfont icon-e" style="font-size: 30px"></i>
+            <i class="iconfont icon-r" style="font-size: 30px"></i>
+            <i class="iconfont icon-f" style="font-size: 30px"></i>
+            <i class="iconfont icon-o" style="font-size: 30px"></i>
+            <i class="iconfont icon-r" style="font-size: 30px"></i>
+            <i class="iconfont icon-u" style="font-size: 30px"></i>
+            <i class="iconfont icon-m" style="font-size: 30px"></i>
+          </div>
+        </router-link>
         <div style="display: inline; position: relative; right: 20%">
           <el-input style="width: 20%" placeholder="输入搜索内容"></el-input>
           <el-button type="primary" style="position: relative; left: 5px">搜索论坛</el-button>

@@ -1,54 +1,85 @@
 <script setup>
 import {onBeforeRouteUpdate, useRoute} from "vue-router";
-import {watch, ref, reactive} from "vue";
+import {watch, ref, reactive, nextTick} from "vue";
 import axiosInstance from "../axios/request.js";
 
-const route = useRoute();
-let id = ref(route.params.id);
-const blogs = reactive([]);
+const props = defineProps({
+  id : Number
+})
+
+const isBlogsLoading = ref(false);
+
+const blogs = ref([]);
 let forum = reactive({
   name: '',
   id: 0,
   ownerId : 0
 })
 
-onBeforeRouteUpdate((to, from, next) => {
-  id.value = to.params.id;
-  next();
-});
-
-axiosInstance.get('/api/forum/' + id.value).then(res =>
+getForum(props.id)
+getBlogs(props.id)
+onBeforeRouteUpdate( (to, from, next)=>
 {
-  forum = reactive(res.data.data)
-  console.log(forum)
-}).catch(err =>
-{
-  alert(err)
+  const id = to.params.id
+  getForum(id)
+  getBlogs(id)
+  next()
 })
 
-axiosInstance.get('/api/forum/' + id.value + '/blog/1').then(res =>
+function getForum(id)
 {
-  console.log(res)
-  const response = res.data
-  blogs.value = response.data.data
-  console.log(blogs.value)
-}).catch(err =>
+  axiosInstance.get('/api/forum/' + id).then(res =>
+  {
+    forum.name = res.data.data.name;
+    forum.id = res.data.data.id;
+    forum.ownerId = res.data.data.ownerId;
+  }).catch(err =>
+  {
+    alert(err)
+  })
+}
+
+function getBlogs(id)
 {
-  alert(err)
-})
+  isBlogsLoading.value = false
+  axiosInstance.get('/api/forum/' + id + '/blog/1').then(res =>
+  {
+    const response = res.data
+    if (response.data === null)
+      return;
+    blogs.value = response.data.data
+    console.log(response.data.data)
+    isBlogsLoading.value = true
+  }).catch(err =>
+  {
+    alert(err)
+  })
+}
+
+function getTimeString(date)
+{
+  date = new Date(date);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  const second = date.getSeconds();
+  return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+}
 
 </script>
 
 <template>
-<h2 style="text-align: center" :id="forum.name">{{forum.name}}</h2>
+  <h2 style="text-align: center" :id="forum.id">{{forum.name}}</h2>
   <hr>
-  <div v-for="blog in blogs">
-    <div>
-      <router-link to=''>{{blog.title}}</router-link>
+  <div v-if="isBlogsLoading" v-for="blog in blogs">
+    <div style="text-align: center">
+      <router-link :to="'/blog/' + blog.id" style="text-decoration: none">{{blog.title}}</router-link>
     </div>
     <p>{{blog.content}}</p>
-    <p>{{blog.creationTime}}</p>
-    <p>{{blog.username}}</p>
+    <p>发帖时间：{{getTimeString(blog.creationTime)}}</p>
+    <p>作者：{{blog.username}}</p>
     <hr>
   </div>
 </template>

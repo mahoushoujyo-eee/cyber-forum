@@ -30,7 +30,8 @@ const routes = createRouter({
                 {
                     path: '/forum/:id',
                     component: ForumTem,
-                    name: 'forum'
+                    name: 'forum',
+                    props: true
                 }
             ]
         },
